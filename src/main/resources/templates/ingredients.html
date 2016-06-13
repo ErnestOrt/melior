@@ -43,10 +43,10 @@
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
                     <li>
-                        <a href="/caixa" ><i class="fa fa-credit-card "></i>Caixa</a>
+                        <a href="/cash" ><i class="fa fa-credit-card "></i>Caixa</a>
                     </li>
                     <li>
-                        <a href="/carta" ><i class="fa fa-book"></i>Carta</a>
+                        <a href="/menu" ><i class="fa fa-book"></i>Carta</a>
                     </li>
                     <li class="active-link">
                         <a href="/ingredients" ><i class="fa fa-briefcase "></i>Ingredients</a>
@@ -60,379 +60,71 @@
         <div id="page-wrapper" >
             <div id="page-inner">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <button type="button" class="btn-lg btn-success" data-toggle="modal" data-target="#myModal"> Nou Ingredient</button>
+                    <div class="col-lg-12 ">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label>Nom: </label>
+                                <input type="text" class="form-control" id="create-ingredient-name" placeholder="Nom"/>
+                            </div>
+                            <div class="form-group">
+                                <label>    Preu de Cost €: </label>
+                                <input type="email" class="form-control" id="create-ingredient-price" placeholder="€"/>
+                            </div>
+                            <button type="submit" class="btn btn-success" onclick="createIngredient()">Crear</button>
+                        </form>
+                        <br/><br/>
                     </div>
-                </div>              
-                 <!-- /. ROW  -->
-                  <hr />
-
+                </div>
                 <div class="row">
                     <div class="col-lg-12 ">
-                        <br/>
-                        <div class="alert alert-success">
-                            <strong>Ordre Cobrada</strong> Checkout fontawesome website and use any icon <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Click Here</a>.
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td><input type="unitats" class="form-control" id="update-ingredient-name" placeholder="Nom"/></td>
+                                                <td><input type="unitats" class="form-control" id="update-ingredient-price" placeholder="Preu de Cost €"/></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="updateIngredient()">Update</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-12 ">
+                    <div class="col-lg-12" >
+                        <table class="table table-condensed">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Preu de cost (€)</th>
+                                <th>Update</th>
+                                <th>Borrar</th>
+                            </tr>
+                            <tr th:each="ingredient  : ${ingredients}">
+                                <td th:id="${ingredient._id} +'-name'" th:text="${ingredient.name}"></td>
+                                <td th:id="${ingredient._id} +'-price'" th:text="${ingredient.price}"></td>
+                                <td><button type="button" class="btn-xs btn-info" th:onclick="'updateModal(\''+ ${ingredient._id} +'\')'">update</button></td>
+                                <td><button type="button" class="btn-xs btn-danger" th:onclick="'deleteIngredient(\''+ ${ingredient._id} +'\')'">borrar</button></td>
+                            </tr>
 
-                      <!-- Modal -->
-                      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                           
-                            <div class="modal-body">
-
-
-                              <table class="table table-condensed">
-                          <tr>
-                          <td><input type="unitats" class="form-control" id="exampleInputEmail1" placeholder="Nom"/></td>
-                          <td><input type="unitats" class="form-control" id="exampleInputEmail1" placeholder="Preu de Cost €"/></td>
-                         </tr>
                         </table>
-
-                        
-
-
-                              
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                       
                     </div>
-                    </div>
-                  <!-- /. ROW  --> 
-                            <div class="row text-center pad-top">
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Xoricets</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-                 
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Ous fregist</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>Ous durs</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>Bocates</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  --> 
-                <div class="row text-center pad-top">
-                 
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-clipboard fa-5x"></i>
-                      <h4>All Docs</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-gear fa-5x"></i>
-                      <h4>Settings</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-wechat fa-5x"></i>
-                      <h4>Live Talk</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-bell-o fa-5x"></i>
-                      <h4>Notifications </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-rocket fa-5x"></i>
-                      <h4>Launch</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-user fa-5x"></i>
-                      <h4>Register User</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-              </div>   
-                  <!-- /. ROW  -->    
-                 <div class="row text-center pad-top">
-                   
-                 
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Mail Box</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>New Issues</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>See Users</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Check Data</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  -->  
-                 <div class="row text-center pad-top">
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-rocket fa-5x"></i>
-                      <h4>Launch</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-clipboard fa-5x"></i>
-                      <h4>All Docs</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-gear fa-5x"></i>
-                      <h4>Settings</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-wechat fa-5x"></i>
-                      <h4>Live Talk</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-bell-o fa-5x"></i>
-                      <h4>Notifications </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-user fa-5x"></i>
-                      <h4>Register User</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-              </div>   
-                  <!-- /. ROW  -->  
-                <div class="row text-center pad-top">
-                   
-                 
-                  
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>New Issues</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>See Users</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Check Data</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Mail Box</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
+                </div>
+
+
 
                   <!-- /. ROW  --> 
     </div>
@@ -454,5 +146,50 @@
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/custom.js}"></script>
 
+    <script type="text/javascript">
+
+    var idUpdateSelected;
+
+    function createIngredient(){
+        $.ajax({
+            url : "/ingredients/create",
+            type: "POST",
+            data : {name: $("#create-ingredient-name").val(),
+                    price: $("#create-ingredient-price").val()},
+            success: function(data, textStatus, jqXHR) { location.reload();}
+        });
+    }
+
+    function deleteIngredient(idIngredient){
+        $.ajax({
+            url : "/ingredients/delete",
+            type: "POST",
+            data : {id: idIngredient},
+            success: function(data, textStatus, jqXHR) { location.reload();}
+        });
+    }
+
+    function updateModal(idIngredient){
+         idUpdateSelected = idIngredient;
+
+         $("#update-ingredient-name").val($("#"+idIngredient+"-name").text());
+         $("#update-ingredient-price").val($("#"+idIngredient+"-price").text());
+         $('#myModal').modal('show');
+    }
+
+    function updateIngredient(){
+        $.ajax({
+            url : "/ingredients/update",
+            type: "POST",
+            data : {id: idUpdateSelected,
+                    name: $("#update-ingredient-name").val(),
+                    price: $("#update-ingredient-price").val()},
+            success: function(data, textStatus, jqXHR) { location.reload();}
+        });
+    }
+
+
+
+    </script>
 </body>
 </html>
