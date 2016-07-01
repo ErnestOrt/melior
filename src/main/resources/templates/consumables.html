@@ -1,0 +1,293 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link th:href="@{/css/loading.css}" rel="stylesheet"/>
+    <link th:href="@{/css/form-validation.css}" rel="stylesheet"/>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+    <div class="front-loading">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
+          
+    <div id="wrapper">
+         <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="adjust-nav">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img th:src="@{/img/logo-2.png}"/>
+
+                    </a>
+                    
+                </div>
+              
+                <span class="logout-spn" >
+                  <a href="#" style="color:#fff;">LOGOUT</a>  
+
+                </span>
+            </div>
+        </div>
+        <!-- /. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a href="/cash" ><i class="fa fa-credit-card"></i>Caixa</a>
+                    </li>
+                    <li>
+                        <a href="/categories" ><i class="fa fa-book"></i>Categories</a>
+                    </li>
+                    <li class="active-link">
+                        <a href="/consumables" ><i class="fa fa-book"></i>Articles</a>
+                    </li>
+                    <li>
+                        <a href="/ingredients" ><i class="fa fa-briefcase"></i>Ingredients</a>
+                    </li>
+
+
+                    
+                </ul>
+                            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button type="button" class="btn-lg btn-success" data-toggle="modal" data-target="#modal-create-consumible"> Nou article</button>
+                    </div>
+                </div>              
+                 <!-- /. ROW  -->
+                  <hr />
+
+                <!-- <div class="row">
+                    <div class="col-lg-12 ">
+                        <br/>
+                        <div class="alert alert-success">
+                            <strong>Ordre Cobrada</strong> Checkout fontawesome website and use any icon <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Click Here</a>.
+                        </div>
+
+                    </div>
+                </div>-->
+
+                <div class="row">
+                    <div class="col-lg-12 ">
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="modal-create-consumible" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-body">
+
+                                <input type="unitats" class="form-control" id="create-consumible-name" placeholder="Nom"/>
+
+                        <table class="table table-condensed">
+                         <tr>
+                          
+                          <th>Preu de cost (€)</th>
+                          <th>Preu Assignat (€)</th>
+                         </tr>
+                          <tr>
+                          <td id="create-consumible-cost">0.0</td>
+                          <td><input type="unitats" class="form-control" id="create-consumible-price" placeholder="€"/></td>
+                         </tr>
+                        </table>
+
+
+                              <table class="table table-condensed">
+                         <tr>
+                          <th>Aticle</th>
+                          <th>Quantitat</th>
+                          <th>Afegir</th>
+                         </tr>
+                          <tr>
+                          <td>
+                            <select class="form-control" id="create-ingredient-select">
+                              <option>Tria...</option>
+                              <option th:each="ingredient  : ${ingredients}" th:text="${ingredient.name}" th:value="${ingredient._id}" th:attr="data-price=${ingredient.price}"></option>
+                            </select>
+                          </td>
+                          <td><input type="unitats" class="form-control" id="create-ingredient-quantity" placeholder="(Unitats / g)"/></td>
+                          <td><button type="button" class="btn-xs btn-info" onclick="addIngredientCreate()">Afegir</button></td>
+                         </tr>
+                        </table>
+
+                        <table id="table-create-ingredients" class="table table-condensed">
+                            <thead>
+                            <tr>
+                              <th>Aticle</th>
+                              <th>Quantitat (Unitari / g)</th>
+                              <th>Borrar</th>
+                             </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+
+
+                              
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cleanUpIngredientsAdded()">Close</button>
+                              <button type="button" class="btn btn-primary" onclick="createConsumable()">Crear Article</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                        <div class="modal fade" id="modal-update-consumible" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+
+                                        <input type="unitats" class="form-control" id="update-consumible-name" placeholder="Nom"/>
+
+                                        <table class="table table-condensed">
+                                            <tr>
+
+                                                <th>Preu de cost (€)</th>
+                                                <th>Preu Assignat (€)</th>
+                                            </tr>
+                                            <tr>
+                                                <td id="update-consumible-cost">0.0</td>
+                                                <td><input type="unitats" class="form-control" id="update-consumible-price" placeholder="€"/></td>
+                                            </tr>
+                                        </table>
+
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th>Aticle</th>
+                                                <th>Quantitat</th>
+                                                <th>Afegir</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <select class="form-control" id="update-ingredient-select">
+                                                        <option>Tria...</option>
+                                                        <option th:each="ingredient  : ${ingredients}" th:text="${ingredient.name}" th:value="${ingredient._id}" th:attr="data-price=${ingredient.price}"></option>
+                                                    </select>
+                                                </td>
+                                                <td><input type="unitats" class="form-control" id="update-ingredient-quantity" placeholder="(Unitats / g)"/></td>
+                                                <td><button type="button" class="btn-xs btn-info" onclick="addIngredientUpdate()">Afegir</button></td>
+                                            </tr>
+                                        </table>
+
+                                        <table id="table-update-ingredients" class="table table-condensed">
+                                            <thead>
+                                            <tr>
+                                                <th>Aticle</th>
+                                                <th>Quantitat (Unitari / g)</th>
+                                                <th>Borrar</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cleanUpIngredientsAdded()">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="updateConsumable()">Update Article</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-offset-8" >
+                        <div class="input-group"> <span class="input-group-addon">Filter</span>
+                            <input id="filter-table" type="text" class="form-control" placeholder="Type here..."/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12" >
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Preu de cost (€)</th>
+                                    <th>Preu de carta (€)</th>
+                                    <th>Update</th>
+                                    <th>Borrar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="searchable">
+                                <tr th:each="consumable,iterStat  : ${consumables}">
+                                    <td th:text="${iterStat.count}"></td>
+                                    <td th:id="${consumable._id} +'-name'" th:text="${consumable.name}"></td>
+                                    <td th:id="${consumable._id} +'-cost'" th:text="${consumable.cost}"></td>
+                                    <td th:id="${consumable._id} +'-price'" th:text="${consumable.priceOnMenu}"></td>
+                                    <td><button type="button" class="btn-xs btn-info" th:onclick="'updateModal(\''+ ${consumable._id} +'\')'">update</button></td>
+                                    <td><button type="button" class="btn-xs btn-danger" th:onclick="'deleteConsumable(\''+ ${consumable._id} +'\')'">borrar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    </div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+    <div class="footer">
+            <div class="row">
+                <div class="col-lg-12" >
+                    &copy;  2016 Melior | No he de adornar con palabras superfluas una grandeza tan manifiesta.
+                </div>
+            </div>
+        </div>
+
+
+    <script th:src="@{/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+    <script th:src="@{/js/filter-table.js}"></script>
+    <script th:src="@{/js/form-validation.js}"></script>
+    <script th:src="@{/js/peers/consumables.js}"></script>
+
+    <script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var consumablesList = [[${consumables}]];
+    var ingredientsList = [[${ingredients}]];
+    /*]]>*/
+
+    </script>
+
+</body>
+</html>
+
+
+

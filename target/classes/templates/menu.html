@@ -1,0 +1,42 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="adjust-nav">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/img/logo-2.png}"/>
+
+            </a>
+
+        </div>
+
+                <span class="logout-spn" >
+                  <a href="#" style="color:#fff;">LOGOUT</a>
+
+                </span>
+    </div>
+</div>
+<!-- /. NAV TOP  -->
+<nav class="navbar-default navbar-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="main-menu">
+            <li>
+                <a href="/cash" ><i class="fa fa-credit-card "></i>Caixa</a>
+            </li>
+            <li>
+                <a href="/categories" ><i class="fa fa-book"></i>Categories</a>
+            </li>
+            <li>
+                <a href="/consumables" ><i class="fa fa-book"></i>Articles</a>
+            </li>
+            <li class="active-link">
+                <a href="/ingredients" ><i class="fa fa-briefcase "></i>Ingredients</a>
+            </li>
+
+        </ul>
+    </div>
+
+</nav>

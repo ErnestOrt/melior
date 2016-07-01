@@ -29,21 +29,18 @@ public class IngredientsController {
 	@RequestMapping(value= "/ingredients/create", method = RequestMethod.POST)
 	@ResponseBody
 	public void createIngredient(@RequestParam(value="name") String name, @RequestParam(value="price") double price) {
-
 		ingredientsService.createIngredient(name, price);
 	}
 
 	@RequestMapping(value= "/ingredients/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public void deleteIngredient(@RequestParam(value="id") String id) {
-
 		ingredientsService.deleteIngredient(id);
 	}
 
 	@RequestMapping(value= "/ingredients/update", method = RequestMethod.POST)
 	@ResponseBody
 	public void updateIngredient(@RequestParam(value="id") String id, @RequestParam(value="name") String name, @RequestParam(value="price") double price) {
-
 		ingredientsService.updateIngredient(new Ingredient(id, name, price));
 	}
 }

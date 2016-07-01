@@ -1,0 +1,516 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.css}" rel="stylesheet"/>
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+
+    <style>
+        .div-actions:hover {color:rgb(274,274,274) !important; background-color: rgb(30,158,156) !important;}
+        .div-articles:hover {color:rgb(30,158,156) !important; background-color: rgb(274,274,274) !important;}
+        .div-numbers:hover {color:rgb(30,158,156) !important;}
+        .div-interact-bill-active {color:rgb(30,158,156) !important;}
+
+    </style>
+
+</head>
+<body>
+     
+           
+          
+
+            <div class="row">
+                <div id="cash-slide" class="col-md-3" style="background-color: rgb(34,40,45); color: rgb(254,254,254);">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-1" id="date-now"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="div-square" id="button-up-bill" style="border-color: rgb(34,40,45);">
+                                <i class="fa fa-arrow-up fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="div-square" id="button-down-bill" style="border-color: rgb(34,40,45);">
+                                <i class="fa fa-arrow-down fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Total: <span id="total-bill">0.0</span> €</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="div-bill" class="col-md-12" style="height: 680px; overflow-y: scroll;">
+                            <table id="table-bill" class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Quan</th>
+                                        <th>Article</th>
+                                        <th>Preu</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+
+
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-6" id="consumibles-slide" style="background-color: rgb(208,216,225);">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="div-square div-articles" onclick="showCategoriesSlider()" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
+                                <i class="fa  fa-list fa-3x" style="color: rgb(140,215,215);"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-md-offset-2">
+                            <div class="div-square div-articles" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
+                                <i class="fa  fa-arrow-left fa-3x" style="color: rgb(140,215,215);"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="div-square div-articles" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
+                                <i class="fa  fa-arrow-right fa-3x" style="color: rgb(140,215,215);"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="category-slider">
+
+                    </div>
+                    <div class="row" id="consumables-slider">
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="div-square">
+                                <i class="fa  fa-user fa-4x"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="div-square">
+                                <i class="fa  fa-sign-out fa-4x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="div-square div-actions">
+                                <i class="fa  fa-money fa-3x"></i>
+                                <h4>Caixa</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-ticket-modal" >
+                                <i class="fa  fa-times-circle-o fa-3x"></i>
+                                <h4>Anular</h4>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-ticket-modal" >
+                                <i class="fa  fa-tree fa-3x" onclick="sellWithoutTicket()"></i>
+                                <h4>Cobrar al moment</h4>
+                            </div>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="sell-ticket-modal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">SUPLEMENT</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+
+                                            <div class="col-md-2">
+                                                <div class="div-square div-actions">
+                                                    <i class="fa  fa-money fa-3x"></i>
+                                                    <h4>Barra</h4>
+                                                </div>
+                                            </div>
+                                            <div data-toggle="modal" data-target="#sell-tables-modal" class="col-md-2 col-md-offset-2">
+                                                <div class="div-square div-actions">
+                                                    <i class="fa  fa-money fa-3x"></i>
+                                                    <h4>Taula</h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-md-offset-2">
+                                                <div class="div-square div-actions">
+                                                    <i class="fa  fa-money fa-3x"></i>
+                                                    <h4>Terasa</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tancar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="sell-tables-modal" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">TAULA</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>1</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>1</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>2</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>3</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>4</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>5</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>6</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>7</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>8</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>9</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>10</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>11</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>12</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>13</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>14</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>15</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>16</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>17</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>18</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>19</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>20</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>21</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>22</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>23</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>24</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>25</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>26</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>27</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>28</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>29</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>30</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>31</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>32</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>33</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>34</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>35</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>36</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>37</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>38</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions"><h4>39</h4></div></div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Tancar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="div-square div-actions">
+                                <i class="fa  fa-print fa-3x"></i>
+                                <h4>Ticket</h4>
+                            </div>
+                        </div>
+
+                        <br/><br/><br/>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3>Preu Liure: <span id="free-price"></span>€</h3>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="div-square" id="div-button-free-price" onclick="setFreeCostClicked()">
+                                <i class="fa fa-money fa-3x" ></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="div-square" id="div-button-times" onclick="setTimesClicked()">
+                                <i class="fa fa-times fa-3x"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="div-square div-actions"  onclick="deleteConsumibleBill()">
+                                <i class="fa fa-trash-o fa-3x"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 div-numbers div-numbers" onclick="numberClicked('7')" style="text-align: center;"><h1>7</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('8')" style="text-align: center;"><h1>8</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('9')" style="text-align: center;"><h1>9</h1></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('4')" style="text-align: center;"><h1>4</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('5')" style="text-align: center;"><h1>5</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('6')" style="text-align: center;"><h1>6</h1></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('1')" style="text-align: center;"><h1>1</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('2')" style="text-align: center;"><h1>2</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('3')" style="text-align: center;"><h1>3</h1></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 div-numbers" onclick="clearClicked()" style="text-align: center;"><h1>C</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('0')" style="text-align: center;"><h1>0</h1></div>
+                        <div class="col-md-4 div-numbers" onclick="numberClicked('.')" style="text-align: center;"><h1>.</h1></div>
+                    </div>
+                </div>
+            </div>
+         <!-- /. PAGE INNER  -->
+
+          
+
+    <script th:src="@{/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+
+    <script th:inline="javascript">
+
+    /*<![CDATA[*/
+
+    var consumibleBillSelected = "0";
+    var scrolled=0;
+
+    var buttonTablePress = false;
+    var buttonTimesPress = false;
+    var buttonFreePricePress = false;
+
+
+    var categorySliderPage = 0;
+    var categorySliderOffset = 6;
+
+    var consumablesSliderPage = 0;
+    var consumablesSliderOffset = 24;
+
+    var categoriesList = [[${categories}]];
+    var consumablesList = [[${consumables}]];
+
+    $(document).ready(function() {
+        $("#cash-slide").height($(document).height());
+        $("#consumibles-slide").height($(document).height());
+
+        for(i=0; i<categoriesList.length && i < categorySliderOffset; i++){
+            addCategoryOnSlider(categoriesList[i]);
+        }
+
+        $("#button-down-bill").on("over" ,function(){
+            scrolled=scrolled+300;
+
+            $("#div-bill").animate({
+                scrollTop:  scrolled
+            });
+
+        });
+
+        $("#button-down-bill").on("click" ,function(){
+            scrolled=scrolled+300;
+
+            $("#div-bill").animate({
+                scrollTop:  scrolled
+            });
+
+        });
+
+
+        $("#button-up-bill").on("click" ,function(){
+            scrolled=scrolled-300;
+
+            $("#div-bill").animate({
+                scrollTop:  scrolled
+            });
+
+        });
+    });
+
+    var myVar = setInterval(displayTime, 1000);
+
+    function showCategoriesSlider(){
+        $("#consumables-slider").hide();
+        $("#category-slider").show();
+
+    }
+
+    function displayTime(){
+        var currentdate = new Date();
+        $("#date-now").html("<h4>" + currentdate.getDate() + "/"
+                                    + (currentdate.getMonth()+1)  + "/"
+                                    + (currentdate.getFullYear())  + " "
+                                    + currentdate.getHours() + ":"
+                                    + currentdate.getMinutes() + ":"
+                                    + currentdate.getSeconds() + "</h4>");
+    }
+
+
+    function updateCategorySlider(value){
+        if((value > 0 && (categorySliderPage + 1) * categorySliderOffset < categoriesList.length + 1) || (value < 0 && categorySliderPage > 0)){
+            $("#category-slider").html("");
+            categorySliderPage = categorySliderPage + value;
+            for(i=categorySliderPage * categorySliderOffset; i<categoriesList.length && i<categorySliderOffset * (1 + categorySliderPage); i++){
+                addCategoryOnSlider(categoriesList[i]);
+            }
+        }
+
+
+    }
+
+    function addCategoryOnSlider(category){
+         $("#category-slider").append('<div class="col-md-4">'
+                                            +'<div class="div-square div-articles" onclick="setConsumablesForCategories(\'' + category._id + '\')" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">'
+                                                 //+'<i class="fa fa-list fa-1x" style="color: rgb(140,215,215);"></i>'
+                                                 +'<h4>' + category.name + '</h4>'
+                                            +'</div>'
+                                          +'</div>');
+    }
+
+    function setConsumablesForCategories(idCategory){
+        $("#category-slider").hide();
+        $("#consumables-slider").show();
+        $("#consumables-slider").html("");
+        for(i=0; i< categoriesList.length; i++){
+            if(idCategory == categoriesList[i]._id){
+                for(j=0; j< categoriesList[i].consumablesIds.length && j < consumablesSliderOffset; j++){
+                    addConsumibleOnSlider(categoriesList[i].consumablesIds[j]);
+                }
+            }
+        }
+    }
+
+    function addConsumibleOnSlider(idConsumible){
+
+        for(m=0; m< consumablesList.length; m++){
+            if(consumablesList[m]._id==idConsumible){
+                $("#consumables-slider").append('<div class="col-md-3">'
+                                                    +'<div class="div-square div-articles" id="consumible-' + consumablesList[m]._id + '" data-name="' + consumablesList[m].name + '" data-price="' + consumablesList[m].priceOnMenu + '" onclick="addConsumableBill(\'' + consumablesList[m]._id + '\')" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">'
+                                                        //+'<i class="fa fa-cutlery fa-4x" style="color: rgb(140,215,215);"></i>'
+                                                         +'<h4>' + consumablesList[m].name + '</h4>'
+                                                    +'</div>'
+                                                  +'</div>');
+            }
+        }
+    }
+
+    function addConsumableBill(idConsumible){
+        var name = $('#consumible-'+ idConsumible).data("name");
+        var price = $('#consumible-'+ idConsumible).data("price");
+
+       $("#table-bill").append('<tr id="row-' + idConsumible + '" onclick="selectConsumibleBill(\'' + idConsumible + '\')" style="height:50px; font-size: 20px;" onclick="">'
+                                    +'<td id="quantity-' + idConsumible + '">1</td>'
+                                    +'<td>'+ name +'</td>'
+                                    +'<td id="price-' + idConsumible + '">'+ price +'</td>'
+                                    +'<td id="total-' + idConsumible + '">'+ price +'</td>'
+                                +'</tr>').hide().show('slow');
+
+       var cost = parseFloat($("#total-bill").text()) + parseFloat(price);
+       $("#total-bill").text(cost.toFixed(2))
+
+    }
+
+    function selectConsumibleBill(idConsumible){
+        $("#row-"+ consumibleBillSelected).css("background-color", "rgb(34,40,45)");
+
+        if(consumibleBillSelected != idConsumible){
+            $("#row-"+ idConsumible).css("background-color", "rgb(30,158,156)");
+            consumibleBillSelected = idConsumible;
+        }else{
+            consumibleBillSelected = "0";
+        }
+    }
+
+    function deleteConsumibleBill(){
+        if(consumibleBillSelected != "0"){
+            var price = $('#consumible-'+ consumibleBillSelected).data("price");
+            var cost = parseFloat($("#total-bill").text()) - parseFloat(price);
+            $("#total-bill").text(cost.toFixed(2))
+            $('#row-'+ consumibleBillSelected).remove();
+            consumibleBillSelected = "0";
+        }
+    }
+
+
+    function numberClicked(number){
+
+        if(buttonTablePress){
+            $("#span-table-number").text($("#span-table-number").text() + number);
+
+        }else if(buttonTimesPress){
+
+            var cost = parseFloat($("#total-bill").text()) - parseFloat($('#total-'+ consumibleBillSelected).text());
+            $("#total-bill").text(cost.toFixed(2))
+
+            $('#quantity-'+ consumibleBillSelected).text($('#quantity-'+ consumibleBillSelected).text() + number);
+
+            var cost = parseFloat($('#quantity-'+ consumibleBillSelected).text()) * parseFloat($('#price-'+ consumibleBillSelected).text());
+            $('#total-'+ consumibleBillSelected).text(cost.toFixed(2));
+
+            var cost = parseFloat($("#total-bill").text()) + parseFloat($('#total-'+ consumibleBillSelected).text());
+            $("#total-bill").text(cost.toFixed(2))
+
+        }else if(buttonFreePricePress){
+            $("#free-price").text($("#free-price").text() + number);
+        }
+    }
+
+    function clearClicked(){
+        if(buttonTablePress){
+            $("#span-table-number").text("");
+        }else if(buttonTimesPress){
+            $('#quantity-'+ consumibleBillSelected).text("");
+        }else if(buttonFreePricePress){
+            $("#free-price").text("");
+        }
+    }
+
+    function setFreeCostClicked(){
+      $("#free-price").text("");
+     if(!buttonFreePricePress){
+            $("#div-button-free-price").addClass("div-interact-bill-active");
+        }else{
+            $("#div-button-free-price").removeClass("div-interact-bill-active");
+        }
+        buttonFreePricePress = !buttonFreePricePress;
+    }
+
+    function setTimesClicked(){
+        if(!buttonTimesPress){
+            $("#div-button-times").addClass("div-interact-bill-active");
+        }else{
+            $("#div-button-times").removeClass("div-interact-bill-active");
+        }
+        buttonTimesPress = !buttonTimesPress;
+    }
+
+
+
+     /*]]>*/
+
+    </script>
+
+</body>
+</html>

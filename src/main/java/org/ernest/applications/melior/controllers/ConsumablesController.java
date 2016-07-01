@@ -29,13 +29,13 @@ public class ConsumablesController {
 	@Autowired
 	IngredientsService ingredientsService;
 
-	@RequestMapping({ "/menu" })
+	@RequestMapping({ "/consumables" })
 	public String getMenuView(Model model) {
 
 		model.addAttribute("consumables", consumablesService.getConsumables());
 		model.addAttribute("ingredients", ingredientsService.getIngredients());
 
-		return "menu";
+		return "consumables";
 	}
 
 	@RequestMapping(value= "/consumable/create", method = RequestMethod.POST)

@@ -10,10 +10,19 @@
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
     <link th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link th:href="@{/css/loading.css}" rel="stylesheet"/>
+    <link th:href="@{/css/form-validation.css}" rel="stylesheet"/>
+
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
 <body>
-           
+
+    <div class="front-loading">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>
           
     <div id="wrapper">
          <div class="navbar navbar-inverse navbar-fixed-top">
@@ -45,8 +54,11 @@
                     <li>
                         <a href="/cash" ><i class="fa fa-credit-card"></i>Caixa</a>
                     </li>
+                    <li>
+                        <a href="/categories" ><i class="fa fa-book"></i>Categories</a>
+                    </li>
                     <li class="active-link">
-                        <a href="/menu" ><i class="fa fa-book "></i>Carta</a>
+                        <a href="/consumables" ><i class="fa fa-book"></i>Articles</a>
                     </li>
                     <li>
                         <a href="/ingredients" ><i class="fa fa-briefcase"></i>Ingredients</a>
@@ -203,7 +215,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cleanUpIngredientsAdded()">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="updateConsumable()">Crear Article</button>
+                                        <button type="button" class="btn btn-primary" onclick="updateConsumable()">Update Article</button>
                                     </div>
                                 </div>
                             </div>
@@ -212,23 +224,35 @@
                     </div>
                     </div>
                 <div class="row">
+                    <div class="col-lg-4 col-md-offset-8" >
+                        <div class="input-group"> <span class="input-group-addon">Filter</span>
+                            <input id="filter-table" type="text" class="form-control" placeholder="Type here..."/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-12" >
                         <table class="table table-condensed">
-                            <tr>
-                                <th>Nom</th>
-                                <th>Preu de cost (€)</th>
-                                <th>Preu de carta (€)</th>
-                                <th>Update</th>
-                                <th>Borrar</th>
-                            </tr>
-                            <tr th:each="consumable  : ${consumables}">
-                                <td th:id="${consumable._id} +'-name'" th:text="${consumable.name}"></td>
-                                <td th:id="${consumable._id} +'-cost'" th:text="${consumable.cost}"></td>
-                                <td th:id="${consumable._id} +'-price'" th:text="${consumable.priceOnMenu}"></td>
-                                <td><button type="button" class="btn-xs btn-info" th:onclick="'updateModal(\''+ ${consumable._id} +'\')'">update</button></td>
-                                <td><button type="button" class="btn-xs btn-danger" th:onclick="'deleteConsumable(\''+ ${consumable._id} +'\')'">borrar</button></td>
-                            </tr>
-
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Preu de cost (€)</th>
+                                    <th>Preu de carta (€)</th>
+                                    <th>Update</th>
+                                    <th>Borrar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="searchable">
+                                <tr th:each="consumable,iterStat  : ${consumables}">
+                                    <td th:text="${iterStat.count}"></td>
+                                    <td th:id="${consumable._id} +'-name'" th:text="${consumable.name}"></td>
+                                    <td th:id="${consumable._id} +'-cost'" th:text="${consumable.cost}"></td>
+                                    <td th:id="${consumable._id} +'-price'" th:text="${consumable.priceOnMenu}"></td>
+                                    <td><button type="button" class="btn-xs btn-info" th:onclick="'updateModal(\''+ ${consumable._id} +'\')'">update</button></td>
+                                    <td><button type="button" class="btn-xs btn-danger" th:onclick="'deleteConsumable(\''+ ${consumable._id} +'\')'">borrar</button></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -238,11 +262,9 @@
          <!-- /. PAGE WRAPPER  -->
         </div>
     <div class="footer">
-      
-    
             <div class="row">
                 <div class="col-lg-12" >
-                    &copy;  2014 yourdomain.com | Design by: <a href="http://binarytheme.com" style="color:#fff;" target="_blank">www.binarytheme.com</a>
+                    &copy;  2016 Melior | No he de adornar con palabras superfluas una grandeza tan manifiesta.
                 </div>
             </div>
         </div>
@@ -251,146 +273,21 @@
     <script th:src="@{/js/jquery-1.10.2.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/js/custom.js}"></script>
+    <script th:src="@{/js/filter-table.js}"></script>
+    <script th:src="@{/js/form-validation.js}"></script>
+    <script th:src="@{/js/peers/consumables.js}"></script>
 
     <script th:inline="javascript">
 
-/*<![CDATA[*/
-
-    var ingredientsAdded = [];
-    var idUpdateSelected;
-
+    /*<![CDATA[*/
     var consumablesList = [[${consumables}]];
     var ingredientsList = [[${ingredients}]];
-
-
-
-    function addIngredientCreate(){
-
-       $('#create-consumible-cost').text(parseFloat($("#create-ingredient-quantity").val()) * parseFloat($("#create-ingredient-select option:selected").data("price")) + parseFloat($('#create-consumible-cost').text()));
-
-       ingredientsAdded.push({ingredientId : $("#create-ingredient-select option:selected").val(), quantity: $("#create-ingredient-quantity").val()});
-
-       $("#table-create-ingredients").append('<tr id="create-'+$("#create-ingredient-select option:selected").val()+'-row"><td>'+$("#create-ingredient-select option:selected").text()+'</td><td>'+$("#create-ingredient-quantity").val()+'</td><td><button type="button" class="btn-xs btn-danger" onclick="removeIngredientCreate(\'create-'+$("#create-ingredient-select option:selected").val()+'\')">Delete</button></td></tr>');
-
-   }
-
-   function addIngredientUpdate(){
-
-       $('#update-consumible-cost').text(parseFloat($("#update-ingredient-quantity").val()) * parseFloat($("#update-ingredient-select option:selected").data("price")) + parseFloat($('#update-consumible-cost').text()));
-
-       ingredientsAdded.push({ingredientId : $("#update-ingredient-select option:selected").val(), quantity: $("#update-ingredient-quantity").val()});
-
-       $("#table-update-ingredients").append('<tr id="update-'+$("#update-ingredient-select option:selected").val()+'-row"><td>'+$("#update-ingredient-select option:selected").text()+'</td><td>'+$("#update-ingredient-quantity").val()+'</td><td><button type="button" class="btn-xs btn-danger" onclick="removeIngredientUpdate(\'create-'+$("#update-ingredient-select option:selected").val()+'\')">Delete</button></td></tr>');
-
-   }
-
-     function removeIngredientCreate(idToBeRemoved){
-
-
-          $('#create-'+idToBeRemoved+'-row').remove();
-
-          var ingredientsAddedAux = [];
-
-          for(i=0;i<ingredientsAdded.length;i++){
-              if(ingredientsAdded[i].ingredientId != idToBeRemoved){
-                  ingredientsAddedAux.push(ingredientsAdded[i]);
-              }
-          }
-
-         ingredientsAdded = ingredientsAddedAux;
-     }
-
-     function removeIngredientUpdate(idToBeRemoved){
-
-
-          $('#update-'+idToBeRemoved+'-row').remove();
-
-          var ingredientsAddedAux = [];
-
-          for(i=0;i<ingredientsAdded.length;i++){
-              if(ingredientsAdded[i].ingredientId != idToBeRemoved){
-                  ingredientsAddedAux.push(ingredientsAdded[i]);
-              }
-          }
-
-         ingredientsAdded = ingredientsAddedAux;
-     }
-
-
-   function createConsumable(){
-        $.ajax({
-            url : "/consumable/create",
-            type: "POST",
-            data : {name: $("#create-consumible-name").val(),
-                    price: $("#create-consumible-price").val(),
-                    ingredients: JSON.stringify(ingredientsAdded)},
-            success: function(data, textStatus, jqXHR) { location.reload();}
-        });
-    }
-
-    function deleteConsumable(idConsumable){
-        $.ajax({
-            url : "/consumable/delete",
-            type: "POST",
-            data : {id: idConsumable},
-            success: function(data, textStatus, jqXHR) { location.reload();}
-        });
-    }
-
-    function updateModal(idConsumable){
-
-        $('#table-update-ingredients tbody > tr').remove();
-        idUpdateSelected = idConsumable;
-
-
-        for(i=0;i<consumablesList.length;i++){
-              if(consumablesList[i]._id == idConsumable){
-                  $("#update-consumible-name").val(consumablesList[i].name);
-                  $("#update-consumible-price").val(consumablesList[i].priceOnMenu);
-                  $('#update-consumible-cost').text(consumablesList[i].cost);
-
-                  for(j=0; j<consumablesList[i].ingredientUsedList.length; j++){
-
-                        ingredientsAdded.push({ingredientId : consumablesList[i].ingredientUsedList[j].ingredientId, quantity: consumablesList[i].ingredientUsedList[j].quantity});
-
-                        var ingredientName;
-                        for(m=0;m<ingredientsList.length;m++){
-                              if(ingredientsList[m]._id == consumablesList[i].ingredientUsedList[j].ingredientId){
-                                  ingredientName = ingredientsList[m].name;
-                              }
-                          }
-
-                        ingredientsAdded.push({ingredientId : consumablesList[i].ingredientUsedList[j].ingredientId, quantity: consumablesList[i].ingredientUsedList[j].quantity});
-
-                        $("#table-update-ingredients").append('<tr id="'+consumablesList[i].ingredientUsedList[j].ingredientId+'-row"><td>'+ingredientName+'</td><td>'+consumablesList[i].ingredientUsedList[j].quantity+'</td><td><button type="button" class="btn-xs btn-danger" onclick="removeIngredient(\''+consumablesList[i].ingredientUsedList[j].ingredientId+'\')">Delete</button></td></tr>');
-
-                  }
-              }
-          }
-         $('#modal-update-consumible').modal('show');
-    }
-
-    function cleanUpIngredientsAdded(){
-
-        ingredientsAdded = [];
-
-    }
-
-
-    function updateConsumable(){
-          $.ajax({
-            url : "/consumable/update",
-            type: "POST",
-            data : {id: idUpdateSelected,
-                    name: $("#update-consumible-name").val(),
-                    price: $("#update-consumible-price").val(),
-                    ingredients: JSON.stringify(ingredientsAdded)},
-            success: function(data, textStatus, jqXHR) { location.reload();}
-        });
-    }
- /*]]>*/
+    /*]]>*/
 
     </script>
 
 </body>
 </html>
+
+
+
