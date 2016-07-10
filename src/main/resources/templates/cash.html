@@ -10,6 +10,7 @@
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
     <link th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link th:href="@{/css/loading.css}" rel="stylesheet"/>
    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
 
@@ -18,13 +19,17 @@
         .div-articles:hover {color:rgb(30,158,156) !important; background-color: rgb(274,274,274) !important;}
         .div-numbers:hover {color:rgb(30,158,156) !important;}
         .div-interact-bill-active {color:rgb(30,158,156) !important;}
-
     </style>
 
 </head>
 <body>
-     
-           
+
+<div class="front-loading">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+</div>
           
 
             <div class="row">
@@ -79,20 +84,20 @@
                             </div>
                         </div>
                         <div class="col-md-2 col-md-offset-2">
-                            <div class="div-square div-articles" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
-                                <i class="fa  fa-arrow-left fa-3x" style="color: rgb(140,215,215);"></i>
+                            <div class="div-square div-articles" id="button-up-consumables" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
+                                <i class="fa  fa-arrow-up fa-3x" style="color: rgb(140,215,215);"></i>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="div-square div-articles" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
-                                <i class="fa  fa-arrow-right fa-3x" style="color: rgb(140,215,215);"></i>
+                            <div class="div-square div-articles" id="button-down-consumables" style="color: rgb(30,158,156); background-color: rgb(30,158,156); color: rgb(254,254,254);">
+                                <i class="fa  fa-arrow-down fa-3x" style="color: rgb(140,215,215);"></i>
                             </div>
                         </div>
                     </div>
                     <div class="row" id="category-slider">
 
                     </div>
-                    <div class="row" id="consumables-slider">
+                    <div class="row" id="consumables-slider" style="height: 750px; overflow-y: scroll;">
 
                     </div>
                 </div>
@@ -127,13 +132,13 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-ticket-modal" >
+                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-rate-modal" >
                                 <i class="fa  fa-tree fa-3x" onclick="sellWithoutTicket()"></i>
                                 <h4>Cobrar al moment</h4>
                             </div>
                         </div>
                         <!-- Modal -->
-                        <div class="modal fade" id="sell-ticket-modal" role="dialog">
+                        <div class="modal fade" id="sell-rate-modal" role="dialog">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -143,19 +148,19 @@
                                         <div class="row">
 
                                             <div class="col-md-2">
-                                                <div class="div-square div-actions">
+                                                <div class="div-square div-actions" onclick="rateSelectedClicked('0')">
                                                     <i class="fa  fa-money fa-3x"></i>
                                                     <h4>Barra</h4>
                                                 </div>
                                             </div>
-                                            <div data-toggle="modal" data-target="#sell-tables-modal" class="col-md-2 col-md-offset-2">
+                                            <div class="col-md-2 col-md-offset-2" onclick="rateSelectedClicked('1')">
                                                 <div class="div-square div-actions">
                                                     <i class="fa  fa-money fa-3x"></i>
                                                     <h4>Taula</h4>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-md-offset-2">
-                                                <div class="div-square div-actions">
+                                                <div class="div-square div-actions" onclick="rateSelectedClicked('2')">
                                                     <i class="fa  fa-money fa-3x"></i>
                                                     <h4>Terasa</h4>
                                                 </div>
@@ -177,47 +182,45 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>1</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>1</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>2</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>3</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>4</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>5</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>6</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>7</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>8</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>9</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>10</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>11</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>12</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>13</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>14</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>15</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>16</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>17</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>18</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>19</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>20</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>21</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>22</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>23</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>24</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>25</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>26</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>27</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>28</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>29</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>30</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>31</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>32</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>33</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>34</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>35</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>36</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>37</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>38</h4></div></div>
-                                            <div class="col-md-1"><div class="div-square div-actions"><h4>39</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>1</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>2</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>3</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>4</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>5</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>6</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>7</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>8</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>9</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>10</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>11</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>12</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>13</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>14</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>15</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>16</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>17</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>18</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>19</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>20</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>21</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>22</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>23</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>24</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>25</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>26</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>27</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>28</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>29</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>30</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>31</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>32</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>33</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>34</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>35</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>36</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>37</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>38</h4></div></div>
+                                            <div class="col-md-1"><div class="div-square div-actions" onclick="tableSelected(this)"><h4>39</h4></div></div>
 
                                         </div>
                                     </div>
@@ -229,7 +232,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-ticket-modal">
+                            <div class="div-square div-actions" data-toggle="modal" data-target="#sell-rate-modal">
                                 <i class="fa  fa-print fa-3x"></i>
                                 <h4>Ticket</h4>
                             </div>
@@ -295,13 +298,19 @@
 
     /*<![CDATA[*/
 
+    var indexConsumableBill = 1;
+
     var consumibleBillSelected = "0";
-    var scrolled=0;
+
+    var scrolledBill=0;
+    var scrolledConsumable=0;
 
     var buttonTablePress = false;
     var buttonTimesPress = false;
     var buttonFreePricePress = false;
 
+    var rateSelected = -1;
+    var consumablesAdded = [];
 
     var categorySliderPage = 0;
     var categorySliderOffset = 6;
@@ -313,6 +322,10 @@
     var consumablesList = [[${consumables}]];
 
     $(document).ready(function() {
+
+        $(".front-loading").height($("body").height());
+        $(".front-loading").hide();
+
         $("#cash-slide").height($(document).height());
         $("#consumibles-slide").height($(document).height());
 
@@ -320,30 +333,40 @@
             addCategoryOnSlider(categoriesList[i]);
         }
 
-        $("#button-down-bill").on("over" ,function(){
-            scrolled=scrolled+300;
-
-            $("#div-bill").animate({
-                scrollTop:  scrolled
-            });
-
-        });
-
         $("#button-down-bill").on("click" ,function(){
-            scrolled=scrolled+300;
+            scrolledBill=scrolledBill+300;
 
             $("#div-bill").animate({
-                scrollTop:  scrolled
+                scrollTop:  scrolledBill
             });
 
         });
 
 
         $("#button-up-bill").on("click" ,function(){
-            scrolled=scrolled-300;
+            scrolledBill=scrolledBill-300;
 
             $("#div-bill").animate({
-                scrollTop:  scrolled
+                scrollTop:  scrolledBill
+            });
+
+        });
+
+         $("#button-down-consumables").on("click" ,function(){
+            scrolledConsumable=scrolledConsumable+600;
+
+            $("#consumables-slider").animate({
+                scrollTop:  scrolledConsumable
+            });
+
+        });
+
+
+        $("#button-up-consumables").on("click" ,function(){
+            scrolledConsumable=scrolledConsumable-600;
+
+            $("#consumables-slider").animate({
+                scrollTop:  scrolledConsumable
             });
 
         });
@@ -393,6 +416,7 @@
         $("#category-slider").hide();
         $("#consumables-slider").show();
         $("#consumables-slider").html("");
+        $("#consumables-slider").scrollTop(0);
         for(i=0; i< categoriesList.length; i++){
             if(idCategory == categoriesList[i]._id){
                 for(j=0; j< categoriesList[i].consumablesIds.length && j < consumablesSliderOffset; j++){
@@ -418,17 +442,25 @@
 
     function addConsumableBill(idConsumible){
         var name = $('#consumible-'+ idConsumible).data("name");
-        var price = $('#consumible-'+ idConsumible).data("price");
+        var price;
 
-       $("#table-bill").append('<tr id="row-' + idConsumible + '" onclick="selectConsumibleBill(\'' + idConsumible + '\')" style="height:50px; font-size: 20px;" onclick="">'
-                                    +'<td id="quantity-' + idConsumible + '">1</td>'
+        if(buttonFreePricePress && $("#free-price").text() != ""){
+            price = $("#free-price").text();
+            setFreeCostClicked();
+        }else{
+            price = $('#consumible-'+ idConsumible).data("price");
+        }
+
+       $("#table-bill").append('<tr id="row-' + indexConsumableBill + '" onclick="selectConsumibleBill(\'' + indexConsumableBill + '\')" data-index="'+indexConsumableBill+'" data-id-consumable="'+idConsumible+'" style="height:50px; font-size: 20px;">'
+                                    +'<td id="quantity-' + indexConsumableBill + '">1</td>'
                                     +'<td>'+ name +'</td>'
-                                    +'<td id="price-' + idConsumible + '">'+ price +'</td>'
-                                    +'<td id="total-' + idConsumible + '">'+ price +'</td>'
+                                    +'<td id="price-' + indexConsumableBill + '">'+ price +'</td>'
+                                    +'<td id="total-' + indexConsumableBill + '">'+ price +'</td>'
                                 +'</tr>').hide().show('slow');
 
        var cost = parseFloat($("#total-bill").text()) + parseFloat(price);
        $("#total-bill").text(cost.toFixed(2))
+       indexConsumableBill = indexConsumableBill + 1;
 
     }
 
@@ -439,17 +471,17 @@
             $("#row-"+ idConsumible).css("background-color", "rgb(30,158,156)");
             consumibleBillSelected = idConsumible;
         }else{
-            consumibleBillSelected = "0";
+            consumibleBillSelected = "-1";
         }
     }
 
     function deleteConsumibleBill(){
-        if(consumibleBillSelected != "0"){
-            var price = $('#consumible-'+ consumibleBillSelected).data("price");
+        if(consumibleBillSelected != "-1"){
+            var price = $('#total-'+ consumibleBillSelected).text();
             var cost = parseFloat($("#total-bill").text()) - parseFloat(price);
             $("#total-bill").text(cost.toFixed(2))
             $('#row-'+ consumibleBillSelected).remove();
-            consumibleBillSelected = "0";
+            consumibleBillSelected = "-1";
         }
     }
 
@@ -504,6 +536,50 @@
             $("#div-button-times").removeClass("div-interact-bill-active");
         }
         buttonTimesPress = !buttonTimesPress;
+    }
+
+     function rateSelectedClicked(rateSelectedCode){
+        rateSelected = rateSelectedCode;
+
+        $('#sell-rate-modal').modal('hide');
+
+        if(rateSelectedCode == '0'){
+            rateSelected = 0;
+            summitBill("-1");
+
+        }else {
+            $('#sell-tables-modal').modal('show');
+        }
+    }
+
+    function tableSelected(element){
+        $('#sell-tables-modal').modal('hide');
+        summitBill($(element).text());
+    }
+
+    function summitBill(tableNumber){
+
+        buildConsumablesAddedList();
+
+        $.ajax({
+            url : "/cash/bill",
+            type: "POST",
+            data : {rateSelected: rateSelected,
+                    tableSelected: tableNumber,
+                    consumables: JSON.stringify(consumablesAdded)},
+            beforeSend: function(){$('.front-loading').show();},
+            error: function(){$('.front-loading').hide()},
+            success: function(data, textStatus, jqXHR) {location.reload();}
+        });
+    }
+
+    function buildConsumablesAddedList(){
+
+        consumablesAdded = [];
+
+        $('#table-bill tbody tr').each(function () {
+            consumablesAdded.push({ingredientId : $(this).data("id-consumable"), quantity: $("#quantity-"+ $(this).data("index")).text(), price: $("#price-"+ $(this).data("index")).text()});
+        });
     }
 
 
