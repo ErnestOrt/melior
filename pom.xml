@@ -44,6 +44,12 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
+		<dependency>
+			<groupId>com.jamierf</groupId>
+			<artifactId>rxtx</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 
 	</dependencies>
 

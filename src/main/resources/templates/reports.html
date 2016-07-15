@@ -1,0 +1,301 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+    <link th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link th:href="@{/css/loading.css}" rel="stylesheet"/>
+    <link th:href="@{/css/form-validation.css}" rel="stylesheet"/>
+
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+<div class="front-loading">
+    <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+    </div>
+</div>
+    <div id="wrapper">
+         <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="adjust-nav">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img th:src="@{/img/logo-2.png}"/>
+
+                    </a>
+
+                </div>
+
+                <span class="logout-spn" >
+                  <a href="#" style="color:#fff;">LOGOUT</a>
+
+                </span>
+            </div>
+        </div>
+        <!-- /. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="/cash" ><i class="fa fa-credit-card "></i>Caixa</a>
+                    </li>
+                    <li>
+                        <a href="/categories" ><i class="fa fa-book"></i>Categories</a>
+                    </li>
+                    <li>
+                        <a href="/consumables" ><i class="fa fa-book"></i>Articles</a>
+                    </li>
+                    <li>
+                        <a href="/ingredients" ><i class="fa fa-briefcase "></i>Ingredients</a>
+                    </li>
+                    <li class="active-link">
+                        <a href="/reports" ><i class="fa fa-briefcase "></i>Reports</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-10">
+                        <ul class="nav nav-pills">
+                            <li role="presentation" id="tab-calendars-graphs" class="active"  onclick="showCalendarsGraphs()"><a>Calendar</a></li>
+                            <li role="presentation" id="tab-lines-graphs" onclick="showLinesGraphs()"><a>Lines</a></li>
+                            <li role="presentation" id="tab-mustache-graphs" onclick="showMustacheGraphs()"><a>Mustache</a></li>
+                            <li role="presentation" id="tab-correlation-graphs" onclick="showCorrelationGraphs()"><a>Correlation</a></li>
+                            <li role="presentation" id="tab-numbers-graphs" onclick="showNumbersGraphs()"><a>Numbers</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <ul class="nav nav-pills">
+                            <li role="presentation" ><a>Download Data XLS</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <br/>
+                <div class="row" id="row-calendars-graphs">
+                    <div class="col-md-12">
+                        <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+                    </div>
+                </div>
+                <div class="row" id="row-lines-graphs">
+                    <div class="col-md-4">
+                        <div id="curve_chart" style="width: 100%; height: 700px"></div>
+                    </div>
+                </div>
+                <div class="row" id="row-mustache-graphs">
+                    <div class="col-md-12">
+                        <div id="chart_div" style="width: 100%; height: 700px;"></div>
+                    </div>
+                </div>
+                <div class="row" id="row-correlation-graphs">
+                    <div class="col-md-12">
+                        <div id="sankey_basic" style="width: 100%; height: 700px;"></div>
+                    </div>
+                </div>
+                <div class="row" id="row-numbers-graphs">
+                    <div class="col-md-12">
+                        <div id="table_div"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+      
+    
+            <div class="row">
+                <div class="col-lg-12" >
+                    &copy;  2016 Melior | Cuando bebas agua, recuerda la fuente.
+                </div>
+            </div>
+        </div>
+
+    <script th:src="@{/js/jquery-1.10.2.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/custom.js}"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+
+
+
+    $(document).ready(function() {
+
+        $(".front-loading").height($("body").height());
+        $(".front-loading").hide();
+        google.charts.load("current", {packages:["calendar", "corechart", "sankey", "table"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+       showCalendarsGraphs();
+
+    });
+
+    function showCalendarsGraphs(){
+        hideGraphs();
+        $("#tab-calendars-graphs").addClass("active");
+        $("#row-calendars-graphs").show();
+    }
+
+    function showLinesGraphs(){
+        hideGraphs();
+        $("#row-lines-graphs").show();
+        $("#tab-lines-graphs").addClass("active");
+    }
+
+    function showMustacheGraphs(){
+        hideGraphs();
+        $("#row-mustache-graphs").show();
+        $("#tab-mustache-graphs").addClass("active");
+    }
+
+    function showCorrelationGraphs(){
+        hideGraphs();
+        $("#row-correlation-graphs").show();
+        $("#tab-correlation-graphs").addClass("active");
+    }
+
+    function showNumbersGraphs(){
+        hideGraphs();
+        $("#row-numbers-graphs").show();
+        $("#tab-numbers-graphs").addClass("active");
+    }
+
+    function hideGraphs(){
+
+        $("#tab-calendars-graphs").removeClass("active");
+        $("#tab-lines-graphs").removeClass("active");
+        $("#tab-mustache-graphs").removeClass("active");
+        $("#tab-correlation-graphs").removeClass("active");
+        $("#tab-numbers-graphs").removeClass("active");
+
+        $("#row-calendars-graphs").hide();
+        $("#row-lines-graphs").hide();
+        $("#row-mustache-graphs").hide();
+        $("#row-correlation-graphs").hide();
+        $("#row-numbers-graphs").hide();
+    }
+
+    function drawChart() {
+           var dataTable = new google.visualization.DataTable();
+           dataTable.addColumn({ type: 'date', id: 'Date' });
+           dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+           dataTable.addRows([
+              [ new Date(2013, 9, 4), 38177 ],
+              [ new Date(2013, 9, 5), 38705 ],
+              [ new Date(2013, 9, 12), 38210 ],
+              [ new Date(2013, 9, 13), 38029 ],
+              [ new Date(2013, 9, 19), 38823 ],
+              [ new Date(2013, 9, 23), 38345 ],
+              [ new Date(2013, 9, 24), 38436 ],
+              [ new Date(2013, 9, 30), 38447 ]
+            ]);
+
+           var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+           var options = {
+             title: "Cafe amb llet",
+             height: 350,
+           };
+
+           chart.draw(dataTable, options);
+
+
+            var data2 = google.visualization.arrayToDataTable([
+              ['Year', 'Sales', 'Expenses'],
+              ['2004',  1000,      400],
+              ['2005',  1170,      460],
+              ['2006',  660,       1120],
+              ['2007',  1030,      540]
+            ]);
+
+            var options2 = {
+              title: 'Company Performance',
+              curveType: 'function',
+              legend: { position: 'bottom' }
+            };
+
+            var chart2 = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart2.draw(data2, options2);
+
+
+         var data3 = google.visualization.arrayToDataTable([
+          ['Mon', 20, 28, 38, 45],
+          ['Tue', 31, 38, 55, 66],
+          ['Wed', 50, 55, 77, 80],
+          ['Thu', 77, 77, 66, 50],
+          ['Fri', 68, 66, 22, 15]
+          // Treat first row as data as well.
+        ], true);
+
+        var options3 = {
+          legend:'none'
+        };
+
+        var chart3 = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+        chart3.draw(data3, options3);
+
+
+
+        var data4 = new google.visualization.DataTable();
+            data4.addColumn('string', 'From');
+            data4.addColumn('string', 'To');
+            data4.addColumn('number', 'Weight');
+            data4.addRows([
+              [ 'A', 'X', 5 ],
+              [ 'A', 'Y', 7 ],
+              [ 'A', 'Z', 6 ],
+              [ 'B', 'X', 2 ],
+              [ 'B', 'Y', 9 ],
+              [ 'B', 'Z', 4 ]
+            ]);
+
+            // Sets chart options.
+            var options4 = {
+              width: 600,
+            };
+
+            // Instantiates and draws our chart, passing in some options.
+            var chart4 = new google.visualization.Sankey(document.getElementById('sankey_basic'));
+            chart4.draw(data4, options4);
+
+        var data5 = new google.visualization.DataTable();
+        data5.addColumn('string', 'Nom');
+        data5.addColumn('number', 'Ventes');
+        data5.addColumn('number', 'Ingresos');
+        data5.addColumn('number', 'Beneficis');
+        data5.addColumn('boolean', 'Actiu');
+        data5.addRows([
+          ['Cafe amb llet',  276, 1980.32, 880.32, true],
+          ['Tallat',  301, 983.32, 770.72, true],
+          ['Combi #3',  123, 380.44, 230.11, true]
+        ]);
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data5, {showRowNumber: true, width: '100%', height: '100%'});
+
+        }
+    </script>
+
+</body>
+</html>
